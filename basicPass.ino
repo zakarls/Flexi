@@ -8,5 +8,6 @@ void loop(){
 
 	int signal = analogRead(A0);
 	Serial.println(signal);
-        delay(200);
+  delay(200);
+	
 }

@@ -1,4 +1,4 @@
-import pygame, random, math
+import pygame, random, math, serial
 
 pygame.init()
 
@@ -11,6 +11,9 @@ pygame.display.set_caption("Luna Flexer")
 done = False
 pressed = False
 clock = pygame.time.Clock()
+
+threshold = 400
+ser = serial.Serial('COM1', 9600)
 
 def ball(x,y): #draw ball
     pygame.draw.circle(screen,black,[x,y],10)
@@ -68,6 +71,7 @@ def rotate_lines(self, deg):
             pl.set_line(line, [p1x, p2x], [p1y, p2y])
 
 rotlines = [[[300,300],[400,400]]]'''
+
 left_bar = [[]]
 right_bar = [[]]
 bars = []
@@ -83,17 +87,17 @@ font = pygame.font.SysFont(None, 25)
 
 while not done:
     #Input
+    voltage = float(ser.readLine())
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
              done = True
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                if not pressed:
-                    up = True
-                    pressed = True
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_UP:
-                pressed = False
+        if voltage >= threshold:
+            if not pressed:
+                up = True
+                pressed = True
+        if voltage <= threshold:
+            pressed = False
 
     #Blank Screen
     screen.fill(white)
@@ -114,6 +118,7 @@ while not done:
     if not right_bar:
         for i in range(len(right_bar)):
             right_bar[i][1]+=(200-y)
+
     '''if not rotlines:
         for i in range(len(rotlines)):
             rotlines[i][0][1] += (200-y)
@@ -151,4 +156,5 @@ while not done:
 
     #Display Tick
     clock.tick(60)
+
 pygame.quit()
