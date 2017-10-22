@@ -1,4 +1,4 @@
-import pygame, random, math
+import pygame, random, math, serial
 
 pygame.init()
 
@@ -11,6 +11,8 @@ pygame.display.set_caption("Flexi")
 done = False
 pressed = False
 clock = pygame.time.Clock()
+
+ser = serial.Serial('COM1', 9600)
 
 def ball(x,y): #draw ball
     pygame.draw.circle(screen,black,[x,y],10)
@@ -62,6 +64,18 @@ while not done:
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_UP:
                 pressed = False
+
+    voltage = float(ser.readline())
+    if voltage >= 400:
+        if not start:
+            xmov = 3
+            start = True
+            if not pressed:
+                up = True
+                pressed = True
+    else:
+        pressed = False
+
     if not start:
         text = font.render("Flex To Start", True, black)
     #Blank Screen
