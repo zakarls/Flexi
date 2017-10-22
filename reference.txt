@@ -1,0 +1,94 @@
+Attribute Name Description
+myRect.left The int value of the X-coordinate of the left side of the rectangle.
+myRect.right The int value of the X-coordinate of the right side of the rectangle.
+myRect.top The int value of the Y-coordinate of the top side of the rectangle.
+myRect.bottom The int value of the Y-coordinate of the bottom side.
+myRect.centerx The int value of the X-coordinate of the center of the rectangle.
+myRect.centery The int value of the Y-coordinate of the center of the rectangle.
+myRect.width The int value of the width of the rectangle.
+myRect.height The int value of the height of the rectangle.
+myRect.size A tuple of two ints: (width, height)
+myRect.topleft A tuple of two ints: (left, top)
+myRect.topright A tuple of two ints: (right, top)
+myRect.bottomleft A tuple of two ints: (left, bottom)
+myRect.bottomright A tuple of two ints: (right, bottom)
+myRect.midleft A tuple of two ints: (left, centery)
+myRect.midright A tuple of two ints: (right, centery)
+myRect.midtop A tuple of two ints: (centerx, top)
+myRect.midbottom A tuple of two ints: (centerx, bottom)
+
+
+
+ pygame.init()
+5.
+6. # set up the window
+7. DISPLAYSURF = pygame.display.set_mode((500, 400), 0, 32)
+8. pygame.display.set_caption('Drawing')
+9.
+10. # set up the colors
+11. BLACK = ( 0, 0, 0)
+12. WHITE = (255, 255, 255)
+13. RED = (255, 0, 0)
+14. GREEN = ( 0, 255, 0)
+15. BLUE = ( 0, 0, 255)
+16.
+17. # draw on the surface object
+18. DISPLAYSURF.fill(WHITE)
+19. pygame.draw.polygon(DISPLAYSURF, GREEN, ((146, 0), (291, 106), (236, 277),
+(56, 277), (0, 106)))
+20. pygame.draw.line(DISPLAYSURF, BLUE, (60, 60), (120, 60), 4)
+21. pygame.draw.line(DISPLAYSURF, BLUE, (120, 60), (60, 120))
+22. pygame.draw.line(DISPLAYSURF, BLUE, (60, 120), (120, 120), 4)
+23. pygame.draw.circle(DISPLAYSURF, BLUE, (300, 50), 20, 0)
+24. pygame.draw.ellipse(DISPLAYSURF, RED, (300, 250, 40, 80), 1)
+25. pygame.draw.rect(DISPLAYSURF, RED, (200, 150, 100, 50))
+26.
+27. pixObj = pygame.PixelArray(DISPLAYSURF)
+28. pixObj[480][380] = BLACK
+29. pixObj[482][382] = BLACK
+30. pixObj[484][384] = BLACK
+31. pixObj[486][386] = BLACK
+32. pixObj[488][388] = BLACK
+33. del pixObj
+34.
+35. # run the game loop
+36. while True:
+37. for event in pygame.event.get():
+38. if event.type == QUIT:
+39. pygame.quit()
+40. sys.exit()
+41. pygame.display.update()
+
+
+
+
+
+Drawing Images with pygame.image.load() and blit()
+The drawing functions are fine if you want to draw simple shapes on the screen, but many games
+have images (also called sprites). Pygame is able to load images onto Surface objects from PNG,
+JPG, GIF, and BMP image files. The differences between these image file formats is described at
+http://invpy.com/formats.
+The image of the cat was stored in a file named cat.png. To load this file’s image, the string
+'cat.png' is passed to the pygame.image.load() function. The
+pygame.image.load() function call will return a Surface object that has the image drawn
+on it. This Surface object will be a separate Surface object from the display Surface object, so we
+must blit (that is, copy) the image’s Surface object to the display Surface object. Blitting is
+drawing the contents of one Surface onto another. It is done with the blit() Surface object
+method.
+If you get an error message like ―pygame.error: Couldn't open cat.png‖ when
+calling pygame.image.load(), then make sure the cat.png file is in the same folder as the
+catanimation.py file before you run the program.
+39. DISPLAYSURF.blit(catImg, (catx, caty))
+Line 39 of the animation program uses the blit() method to copy catImg to DISPLAYSURF.
+There are two parameters for blit(). The first is the source Surface object, which is what will
+be copied onto the DISPLAYSURF Surface object. The second parameter is a two-integer tuple
+for the X and Y values of the topleft corner where the image should be blitted to.
+If catx and caty were set to 100 and 200 and the width of catImg was 125 and the height
+was 79, this blit() call would copy this image onto DISPLAYSURF so that the top left corner
+of the catImg was at the XY coordinate (100, 200) and the bottom right corner’s XY coordinate
+was at (225, 279).
+Note that you cannot blit to a Surface that is currently ―locked‖ (such as when a PixelArray object
+has been made from it and not yet been deleted.)
+The rest of the game loop is just changing the catx, caty, and direction variables so that
+the cat moves around the window. There is also a call to pygame.event.get() to handle the
+QUIT event.
